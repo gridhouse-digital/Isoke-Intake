@@ -1,0 +1,4 @@
+{
+  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }],
+  "devCommand": "node ./node_modules/vite/bin/vite.js --port $PORT"
+}
