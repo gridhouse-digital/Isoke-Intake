@@ -6,7 +6,7 @@ import {
   normalizeEmailAddress,
   normalizeEnvValue,
   type CallbackPayload,
-} from './_lib/callback-email-template'
+} from './_lib/callback-email-template.js'
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {

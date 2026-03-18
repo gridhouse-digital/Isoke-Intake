@@ -7,9 +7,9 @@ import {
   getCodeEncryptionSecret,
   normalizeAccessCode,
   parsePositiveInteger,
-} from '../_lib/intake'
-import { verifyStaffToken } from '../_lib/staff-session'
-import { getSupabaseAdmin } from '../_lib/supabase'
+} from '../_lib/intake.js'
+import { verifyStaffToken } from '../_lib/staff-session.js'
+import { getSupabaseAdmin } from '../_lib/supabase.js'
 
 const STAFF_SEND_SUBJECT = 'Isoke Developmental Services Admissions / Intake Access Details'
 

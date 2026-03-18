@@ -1,6 +1,6 @@
-import { decryptAccessCode, getCodeEncryptionSecret } from '../_lib/intake'
-import { verifyStaffToken } from '../_lib/staff-session'
-import { getSupabaseAdmin } from '../_lib/supabase'
+import { decryptAccessCode, getCodeEncryptionSecret } from '../_lib/intake.js'
+import { verifyStaffToken } from '../_lib/staff-session.js'
+import { getSupabaseAdmin } from '../_lib/supabase.js'
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {

@@ -1,6 +1,6 @@
-import { buildCodeHash, normalizeAccessCode, sleep } from './_lib/intake'
-import { enforceRateLimit } from './_lib/rate-limit'
-import { getSupabaseAdmin } from './_lib/supabase'
+import { buildCodeHash, normalizeAccessCode, sleep } from './_lib/intake.js'
+import { enforceRateLimit } from './_lib/rate-limit.js'
+import { getSupabaseAdmin } from './_lib/supabase.js'
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {

@@ -1,4 +1,4 @@
-import { getSupabaseAdmin } from './supabase'
+import { getSupabaseAdmin } from './supabase.js'
 
 interface RateLimitOptions {
   ip: string

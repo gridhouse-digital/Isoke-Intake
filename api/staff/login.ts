@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs'
-import { signStaffToken } from '../_lib/staff-session'
+import { signStaffToken } from '../_lib/staff-session.js'
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {

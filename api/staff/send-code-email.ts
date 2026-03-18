@@ -1,6 +1,6 @@
 import { Resend } from 'resend'
-import { DEFAULT_CALLBACK_EMAIL_FROM, normalizeEmailAddress, normalizeEnvValue } from '../_lib/callback-email-template'
-import { verifyStaffToken } from '../_lib/staff-session'
+import { DEFAULT_CALLBACK_EMAIL_FROM, normalizeEmailAddress, normalizeEnvValue } from '../_lib/callback-email-template.js'
+import { verifyStaffToken } from '../_lib/staff-session.js'
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
