@@ -33,15 +33,19 @@ export function decryptAccessCode(payload: string | null | undefined, secret: st
     return null
   }
 
-  const decipher = createDecipheriv('aes-256-gcm', deriveEncryptionKey(secret), Buffer.from(ivHex, 'hex'))
-  decipher.setAuthTag(Buffer.from(authTagHex, 'hex'))
+  try {
+    const decipher = createDecipheriv('aes-256-gcm', deriveEncryptionKey(secret), Buffer.from(ivHex, 'hex'))
+    decipher.setAuthTag(Buffer.from(authTagHex, 'hex'))
 
-  const decrypted = Buffer.concat([
-    decipher.update(Buffer.from(encryptedHex, 'hex')),
-    decipher.final(),
-  ])
+    const decrypted = Buffer.concat([
+      decipher.update(Buffer.from(encryptedHex, 'hex')),
+      decipher.final(),
+    ])
 
-  return decrypted.toString('utf8')
+    return decrypted.toString('utf8')
+  } catch {
+    return null
+  }
 }
 
 export function extractLast4(input: string) {
@@ -98,7 +102,7 @@ export function parsePositiveInteger(value: unknown, fallback: number) {
 }
 
 export function getCodeEncryptionSecret() {
-  return process.env.CODE_ENCRYPTION_SECRET?.trim() || process.env.CODE_HASH_PEPPER?.trim() || ''
+  return process.env.CODE_ENCRYPTION_SECRET?.trim() || ''
 }
 
 export function sleep(ms: number) {

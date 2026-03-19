@@ -13,6 +13,10 @@ function getBearerToken(request: Request) {
   return auth.startsWith('Bearer ') ? auth.slice('Bearer '.length) : ''
 }
 
+function isUuid(value: string) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value)
+}
+
 export async function POST(request: Request) {
   try {
     const token = getBearerToken(request)
@@ -23,6 +27,10 @@ export async function POST(request: Request) {
     const { id } = (await request.json()) as { id?: string }
     if (!id) {
       return jsonResponse({ ok: false, error: 'Code id is required.' }, 400)
+    }
+
+    if (!isUuid(id)) {
+      return jsonResponse({ ok: false, error: 'Code id must be a valid UUID.' }, 400)
     }
 
     const supabase = getSupabaseAdmin()

@@ -43,6 +43,7 @@ export async function POST(request: Request) {
     }
 
     const supabase = getSupabaseAdmin()
+    const encryptionSecret = getCodeEncryptionSecret()
     type IntakeCodeRow = {
       client_ref: string | null
       code_ciphertext?: string | null
@@ -83,9 +84,10 @@ export async function POST(request: Request) {
     }
 
     const codes = (data || []).map(code => ({
-      code: hasCiphertextColumn
-        ? decryptAccessCode((code as { code_ciphertext?: string | null }).code_ciphertext, getCodeEncryptionSecret())
-        : null,
+      code:
+        hasCiphertextColumn && encryptionSecret
+          ? decryptAccessCode((code as { code_ciphertext?: string | null }).code_ciphertext, encryptionSecret)
+          : null,
       id: code.id,
       last4: code.last4,
       clientRef: code.client_ref,

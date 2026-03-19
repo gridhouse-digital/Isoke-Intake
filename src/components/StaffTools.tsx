@@ -372,6 +372,16 @@ export function StaffTools({ onOpenAudit, onSessionStateChange }: StaffToolsProp
                   </div>
                 </div>
 
+                {feedback ? (
+                  <p
+                    className={`staff-feedback ${feedbackTone === 'success' ? 'status-success' : 'status-error'}`}
+                    role="status"
+                    aria-live="polite"
+                  >
+                    {feedback}
+                  </p>
+                ) : null}
+
                 <form className="email-send-form" onSubmit={handleSendEmail}>
                   <div className="email-send-header">
                     <div>
@@ -429,7 +439,11 @@ export function StaffTools({ onOpenAudit, onSessionStateChange }: StaffToolsProp
             </div>
           )}
 
-          {feedback ? <p className={feedbackTone === 'success' ? 'status-success' : 'status-error'}>{feedback}</p> : null}
+          {!staffToken && feedback ? (
+            <p className={`staff-feedback ${feedbackTone === 'success' ? 'status-success' : 'status-error'}`} role="status" aria-live="polite">
+              {feedback}
+            </p>
+          ) : null}
         </section>
       </aside>
     </>

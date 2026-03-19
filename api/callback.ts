@@ -7,12 +7,35 @@ import {
   normalizeEnvValue,
   type CallbackPayload,
 } from './_lib/callback-email-template.js'
+import { sleep } from './_lib/intake.js'
+import { enforceRateLimit } from './_lib/rate-limit.js'
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
     headers: { 'Content-Type': 'application/json' },
   })
+}
+
+function getClientIp(request: Request) {
+  const forwarded = request.headers.get('x-forwarded-for')
+  if (forwarded) {
+    return forwarded.split(',')[0]?.trim() || 'unknown'
+  }
+
+  return request.headers.get('x-real-ip')?.trim() || 'unknown'
+}
+
+function stripNewlines(value: string) {
+  return value.replace(/\r?\n/g, ' ').trim()
+}
+
+function clampLength(value: string, max: number) {
+  if (value.length <= max) {
+    return value
+  }
+
+  return value.slice(0, max)
 }
 
 async function sendCallbackEmail(payload: CallbackPayload) {
@@ -66,6 +89,21 @@ async function forwardCallbackWebhook(payload: CallbackPayload) {
 
 export async function POST(request: Request) {
   try {
+    const windowMs = Number(process.env.CALLBACK_RATE_LIMIT_WINDOW_MS || 10 * 60 * 1000)
+    const max = Number(process.env.CALLBACK_RATE_LIMIT_MAX || 10)
+    const ip = getClientIp(request)
+
+    const rateLimit = await enforceRateLimit({
+      ip,
+      max,
+      scope: 'callback',
+      windowMs,
+    })
+
+    if (rateLimit.limited) {
+      return jsonResponse({ ok: false, error: 'rate_limited' }, 429)
+    }
+
     const body = (await request.json()) as {
       bestTime?: string
       message?: string
@@ -74,23 +112,29 @@ export async function POST(request: Request) {
       service?: string
     }
 
-    const name = body.name?.trim() ?? ''
-    const phone = body.phone?.trim() ?? ''
-    const bestTime = body.bestTime?.trim() ?? ''
-    const message = body.message?.trim() ?? ''
-    const service = body.service?.trim() ?? 'intake_access_support'
+    const name = stripNewlines(body.name?.trim() ?? '')
+    const phone = stripNewlines(body.phone?.trim() ?? '')
+    const bestTime = stripNewlines(body.bestTime?.trim() ?? '')
+    const message = (body.message ?? '').trim()
+    const service = stripNewlines(body.service?.trim() ?? 'intake_access_support')
 
     if (!name || !phone || !bestTime) {
+      await sleep(200)
       return jsonResponse({ ok: false, error: 'name, phone, and bestTime are required' }, 400)
+    }
+
+    if (name.length > 120 || phone.length > 48 || bestTime.length > 120 || service.length > 80 || message.length > 2000) {
+      await sleep(200)
+      return jsonResponse({ ok: false, error: 'Request fields are too large.' }, 400)
     }
 
     const payload: CallbackPayload = {
       at: new Date().toISOString(),
-      bestTime,
-      message,
-      name,
-      phone,
-      service,
+      bestTime: clampLength(bestTime, 120),
+      message: clampLength(message, 2000),
+      name: clampLength(name, 120),
+      phone: clampLength(phone, 48),
+      service: clampLength(service, 80),
     }
 
     const [emailResult, webhookResult] = await Promise.all([sendCallbackEmail(payload), forwardCallbackWebhook(payload)])
