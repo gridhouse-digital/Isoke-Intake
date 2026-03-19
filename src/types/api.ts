@@ -62,3 +62,32 @@ export interface DeleteCodeResponse {
   error?: string
   ok: boolean
 }
+
+export interface JotformSubmissionSummary {
+  createdAt: string
+  email?: string
+  id: string
+  title?: string
+}
+
+export interface ListSubmissionsResponse {
+  error?: string
+  ok: boolean
+  offset?: number
+  submissions?: JotformSubmissionSummary[]
+  total?: number
+}
+
+export interface JotformSubmissionDetail {
+  answers?: Record<string, unknown>
+  createdAt: string
+  id: string
+  raw?: Record<string, unknown>
+  title?: string
+}
+
+export interface GetSubmissionResponse {
+  error?: string
+  ok: boolean
+  submission?: JotformSubmissionDetail
+}
