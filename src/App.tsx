@@ -7,6 +7,7 @@ import { StaffTools } from './components/StaffTools'
 import { SupportCard } from './components/SupportCard'
 import { useDocumentMeta } from './lib/useDocumentMeta'
 import { AuditPage } from './pages/AuditPage'
+import { SubmissionsPage } from './pages/SubmissionsPage'
 
 function IntakeHome() {
   const [isUnlocked, setIsUnlocked] = useState(false)
@@ -108,6 +109,7 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={<IntakeHome />} />
       <Route path="/audit" element={<AuditPage onBack={() => navigate('/')} />} />
+      <Route path="/submissions" element={<SubmissionsPage onBack={() => navigate('/audit')} />} />
       <Route path="*" element={<IntakeHome />} />
     </Routes>
   )

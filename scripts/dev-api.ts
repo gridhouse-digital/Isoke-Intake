@@ -10,12 +10,16 @@ import { POST as staffLoginPost } from '../api/staff/login.ts'
 import { POST as staffRevokeCodePost } from '../api/staff/revoke-code.ts'
 import { POST as staffSessionPost } from '../api/staff/session.ts'
 import { POST as staffSendCodeEmailPost } from '../api/staff/send-code-email.ts'
+import { POST as jotformGetSubmissionPost } from '../api/staff/jotform/get-submission.ts'
+import { POST as jotformListSubmissionsPost } from '../api/staff/jotform/list-submissions.ts'
 
 const PORT = 3001
 const routeHandlers = new Map<string, (request: Request) => Promise<Response>>([
   ['/api/callback', callbackPost],
   ['/api/staff/create-code', staffCreateCodePost],
   ['/api/staff/delete-code', staffDeleteCodePost],
+  ['/api/staff/jotform/get-submission', jotformGetSubmissionPost],
+  ['/api/staff/jotform/list-submissions', jotformListSubmissionsPost],
   ['/api/staff/list-codes', staffListCodesPost],
   ['/api/staff/login', staffLoginPost],
   ['/api/staff/revoke-code', staffRevokeCodePost],
@@ -143,6 +147,8 @@ server.listen(PORT, () => {
   console.log(`[dev-api] Staff login on http://localhost:${PORT}/api/staff/login`)
   console.log(`[dev-api] Staff create-code on http://localhost:${PORT}/api/staff/create-code`)
   console.log(`[dev-api] Staff delete-code on http://localhost:${PORT}/api/staff/delete-code`)
+  console.log(`[dev-api] Staff jotform list-submissions on http://localhost:${PORT}/api/staff/jotform/list-submissions`)
+  console.log(`[dev-api] Staff jotform get-submission on http://localhost:${PORT}/api/staff/jotform/get-submission`)
   console.log(`[dev-api] Staff list-codes on http://localhost:${PORT}/api/staff/list-codes`)
   console.log(`[dev-api] Staff revoke-code on http://localhost:${PORT}/api/staff/revoke-code`)
   console.log(`[dev-api] Staff session on http://localhost:${PORT}/api/staff/session`)

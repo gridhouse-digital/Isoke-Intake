@@ -1,5 +1,6 @@
-import { ArrowLeft, Ban, RefreshCw, Trash2 } from 'lucide-react'
+import { ArrowLeft, Ban, Eye, RefreshCw, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { postJson } from '../lib/request'
 import { STAFF_TOKEN_KEY, clearSessionFlag, getSessionFlag } from '../lib/storage'
 import type { DeleteCodeResponse, ListCodesResponse, RevokeCodeResponse, StaffCodeRecord } from '../types/api'
@@ -26,6 +27,7 @@ export function AuditPage({ onBack }: AuditPageProps) {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<(typeof STATUS_OPTIONS)[number]['value']>('all')
   const staffToken = getSessionFlag(STAFF_TOKEN_KEY)
+  const navigate = useNavigate()
 
   const loadCodes = useCallback(async () => {
     if (!staffToken) {
@@ -178,6 +180,10 @@ export function AuditPage({ onBack }: AuditPageProps) {
           <button className="ghost-button" type="button" onClick={onBack}>
             <ArrowLeft size={16} />
             Back to intake
+          </button>
+          <button className="ghost-button" type="button" onClick={() => navigate('/submissions')}>
+            <Eye size={16} />
+            View submissions
           </button>
           <button className="secondary-button" type="button" onClick={() => void loadCodes()} disabled={isLoading}>
             <RefreshCw size={16} className={isLoading ? 'spin' : ''} />
