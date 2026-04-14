@@ -56,6 +56,29 @@ describe('normalizeJotformSubmissionRows', () => {
     ])
   })
 
+  it('promotes jotform file objects into image rows using their hosted link', () => {
+    const answers = {
+      one: {
+        order: '1',
+        text: 'Signature',
+        answer: {
+          name: 'signature.png',
+          link: 'https://www.jotform.com/uploads/example/1234567890/signature.png',
+        },
+      },
+    }
+
+    expect(normalizeJotformSubmissionRows(answers)).toEqual([
+      {
+        kind: 'image',
+        alt: 'Signature submission',
+        imageUrl: 'https://www.jotform.com/uploads/example/1234567890/signature.png',
+        label: 'Signature',
+        order: 1,
+      },
+    ])
+  })
+
   it('classifies section-only headings separately from unanswered questions', () => {
     const answers = {
       one: { order: '1', text: 'Participant Information' },

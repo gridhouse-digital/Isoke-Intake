@@ -531,7 +531,7 @@ button:focus {
   top: 12px;
   right: 12px;
   bottom: 12px;
-  width: min(1060px, calc(100vw - 24px));
+  width: min(1180px, calc(100vw - 24px));
   z-index: 40;
   transform: translateX(calc(100% + 24px));
   transition: transform 220ms ease;
@@ -717,6 +717,24 @@ button:focus {
   color: rgba(255, 255, 255, 0.78);
 }
 
+.staff-process-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.staff-process-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f8eef7;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
 .staff-status-pill {
   display: inline-flex;
   align-items: center;
@@ -771,7 +789,7 @@ button:focus {
 
 .staff-workspace {
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.85fr);
+  grid-template-columns: minmax(0, 1.6fr) minmax(320px, 0.82fr);
   gap: 18px;
   align-items: start;
 }
@@ -794,6 +812,37 @@ button:focus {
   color: var(--muted);
 }
 
+.staff-form-section {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(123, 94, 167, 0.1);
+}
+
+.staff-section-heading {
+  display: grid;
+  gap: 4px;
+}
+
+.staff-section-heading strong {
+  color: var(--violet-deep);
+  font-size: 0.96rem;
+  letter-spacing: -0.01em;
+}
+
+.staff-section-heading p {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.staff-form-section-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
 .staff-command-panel,
 .staff-email-panel,
 .staff-side-panel {
@@ -809,6 +858,11 @@ button:focus {
 .staff-side-stack {
   display: grid;
   gap: 12px;
+}
+
+.staff-side-column {
+  position: sticky;
+  top: 0;
 }
 
 .staff-side-card {
@@ -1142,6 +1196,14 @@ button:focus {
 
   .staff-workspace {
     grid-template-columns: 1fr;
+  }
+
+  .staff-form-section-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .staff-side-column {
+    position: static;
   }
 
   .history-card-row span {

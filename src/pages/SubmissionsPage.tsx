@@ -9,6 +9,87 @@ interface SubmissionsPageProps {
   onBack: () => void
 }
 
+interface SubmissionImageProps {
+  alt: string
+  imageUrl: string
+  label: string
+  staffToken: string
+}
+
+function SubmissionImage({ alt, imageUrl, label, staffToken }: SubmissionImageProps) {
+  const [blobUrl, setBlobUrl] = useState('')
+  const [loadError, setLoadError] = useState('')
+
+  useEffect(() => {
+    let isActive = true
+    let objectUrl = ''
+
+    async function loadImage() {
+      try {
+        setLoadError('')
+        setBlobUrl('')
+
+        const response = await fetch('/api/staff/jotform/file', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${staffToken}`,
+          },
+          body: JSON.stringify({ url: imageUrl }),
+        })
+
+        if (!response.ok) {
+          throw new Error('Image request failed')
+        }
+
+        const blob = await response.blob()
+        objectUrl = URL.createObjectURL(blob)
+
+        if (!isActive) {
+          URL.revokeObjectURL(objectUrl)
+          return
+        }
+
+        setBlobUrl(objectUrl)
+      } catch {
+        if (isActive) {
+          setLoadError('Unable to load this image.')
+        }
+      }
+    }
+
+    void loadImage()
+
+    return () => {
+      isActive = false
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl)
+      }
+    }
+  }, [imageUrl, staffToken])
+
+  if (blobUrl) {
+    return (
+      <a
+        className="submission-image-link"
+        href={blobUrl}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={`Open ${label}`}
+      >
+        <img
+          className="submission-image"
+          src={blobUrl}
+          alt={alt}
+          loading="lazy"
+        />
+      </a>
+    )
+  }
+
+  return <span>{loadError || 'Loading image...'}</span>
+}
+
 export function SubmissionsPage({ onBack }: SubmissionsPageProps) {
   const staffToken = getSessionFlag(STAFF_TOKEN_KEY)
   const [submissions, setSubmissions] = useState<JotformSubmissionSummary[]>([])
@@ -283,19 +364,12 @@ export function SubmissionsPage({ onBack }: SubmissionsPageProps) {
                               }}
                             />
                           ) : row.kind === 'image' ? (
-                            <a
-                              className="submission-image-link"
-                              href={row.imageUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              <img
-                                className="submission-image"
-                                src={row.imageUrl}
-                                alt={row.alt}
-                                loading="lazy"
-                              />
-                            </a>
+                            <SubmissionImage
+                              alt={row.alt}
+                              imageUrl={row.imageUrl}
+                              label={row.label}
+                              staffToken={staffToken}
+                            />
                           ) : row.kind === 'field' ? <span>{row.answerText}</span> : null}
                         </div>
                       )

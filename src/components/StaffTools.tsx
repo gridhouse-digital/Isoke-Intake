@@ -286,6 +286,11 @@ export function StaffTools({ onOpenAudit, onSessionStateChange }: StaffToolsProp
                   ? 'Create codes, review the outbound message, and move directly into audit without leaving this control room.'
                   : 'Sign in to open the intake operations workspace for code generation, email delivery, and audit review.'}
               </p>
+              <div className="staff-process-strip" aria-label="Staff workflow">
+                <span className="staff-process-chip">1. Generate code</span>
+                <span className="staff-process-chip">2. Review message</span>
+                <span className="staff-process-chip">3. Send or audit</span>
+              </div>
             </div>
             <div className="staff-hero-meta">
               <div className="staff-hero-metric">
@@ -331,78 +336,95 @@ export function StaffTools({ onOpenAudit, onSessionStateChange }: StaffToolsProp
           ) : (
             <div className="staff-workspace">
               <div className="staff-main-column">
-                <div className="generated-panel staff-command-panel">
-                  <div className="staff-panel-intro">
-                    <div className="eyebrow">Code generation</div>
-                    <h4>Create a secure intake code</h4>
-                    <p>Use either phone or last 4 digits, then set usage and expiry before drafting the outbound email.</p>
+              <div className="generated-panel staff-command-panel">
+                <div className="staff-panel-intro">
+                  <div className="eyebrow">Code generation</div>
+                  <h4>Create a secure intake code</h4>
+                  <p>Use either phone or last 4 digits, then set usage and expiry before drafting the outbound email.</p>
+                </div>
+
+                <form className="form-grid" onSubmit={handleCreateCode}>
+                  <div className="staff-form-section full-width">
+                    <div className="staff-section-heading">
+                      <strong>Client context</strong>
+                      <p>Use a phone number or last four digits to bind the code to the right person.</p>
+                    </div>
+                    <div className="staff-form-section-grid">
+                      <label>
+                        Client phone
+                        <input
+                          autoComplete="tel"
+                          name="clientPhone"
+                          value={phone}
+                          onChange={event => setPhone(event.target.value)}
+                          placeholder="(844) 476-5313"
+                        />
+                      </label>
+
+                      <label>
+                        Or last 4 digits
+                        <input
+                          autoComplete="off"
+                          name="clientLast4"
+                          value={last4}
+                          onChange={event => setLast4(event.target.value)}
+                          placeholder="5313"
+                        />
+                      </label>
+
+                      <label className="full-width">
+                        Client Name
+                        <input
+                          autoComplete="off"
+                          name="clientRef"
+                          value={clientRef}
+                          onChange={event => setClientRef(event.target.value)}
+                          placeholder="Jane Doe"
+                        />
+                      </label>
+                    </div>
                   </div>
 
-                  <form className="form-grid" onSubmit={handleCreateCode}>
-                    <label>
-                      Client phone
-                      <input
-                        autoComplete="tel"
-                        name="clientPhone"
-                        value={phone}
-                        onChange={event => setPhone(event.target.value)}
-                        placeholder="(844) 476-5313"
-                      />
-                    </label>
+                  <div className="staff-form-section full-width">
+                    <div className="staff-section-heading">
+                      <strong>Access policy</strong>
+                      <p>Set how long the code is active and how many times it can be used.</p>
+                    </div>
+                    <div className="staff-form-section-grid">
+                      <label>
+                        Expiry days
+                        <input
+                          autoComplete="off"
+                          name="expiresInDays"
+                          inputMode="numeric"
+                          min="1"
+                          type="number"
+                          value={expiresInDays}
+                          onChange={event => setExpiresInDays(event.target.value)}
+                          required
+                        />
+                      </label>
 
-                    <label>
-                      Or last 4 digits
-                      <input
-                        autoComplete="off"
-                        name="clientLast4"
-                        value={last4}
-                        onChange={event => setLast4(event.target.value)}
-                        placeholder="5313"
-                      />
-                    </label>
+                      <label>
+                        Max uses
+                        <input
+                          autoComplete="off"
+                          name="maxUses"
+                          inputMode="numeric"
+                          min="1"
+                          type="number"
+                          value={maxUses}
+                          onChange={event => setMaxUses(event.target.value)}
+                          required
+                        />
+                      </label>
+                    </div>
+                  </div>
 
-                    <label>
-                      Expiry days
-                      <input
-                        autoComplete="off"
-                        name="expiresInDays"
-                        inputMode="numeric"
-                        min="1"
-                        type="number"
-                        value={expiresInDays}
-                        onChange={event => setExpiresInDays(event.target.value)}
-                        required
-                      />
-                    </label>
-
-                    <label>
-                      Max uses
-                      <input
-                        autoComplete="off"
-                        name="maxUses"
-                        inputMode="numeric"
-                        min="1"
-                        type="number"
-                        value={maxUses}
-                        onChange={event => setMaxUses(event.target.value)}
-                        required
-                      />
-                    </label>
-
-                    <label className="full-width">
-                      Client Name
-                      <input
-                        autoComplete="off"
-                        name="clientRef"
-                        value={clientRef}
-                        onChange={event => setClientRef(event.target.value)}
-                      />
-                    </label>
-
-                    <div className="staff-actions full-width">
-                      <button className="secondary-button" type="submit" disabled={isSubmitting}>
-                        <Sparkles size={16} />
-                        {isSubmitting ? 'Generating...' : 'Generate code'}
+                  <div className="staff-actions full-width">
+                    <button className="secondary-button" type="submit" disabled={isSubmitting}>
+                      <Sparkles size={16} />
+                      {isSubmitting ? 'Generating...' : 'Generate code'}
                       </button>
 
                       <button className="ghost-button" type="button" onClick={handleLogout}>
@@ -489,6 +511,10 @@ export function StaffTools({ onOpenAudit, onSessionStateChange }: StaffToolsProp
                     <div className="summary-card staff-side-card">
                       <strong>Next move</strong>
                       <p>Generate a code, confirm the draft, then send or jump into audit.</p>
+                    </div>
+                    <div className="summary-card staff-side-card">
+                      <strong>Recommended flow</strong>
+                      <p>Use client phone when possible, review expiry before sending, then verify the record in audit.</p>
                     </div>
                   </div>
                 </div>

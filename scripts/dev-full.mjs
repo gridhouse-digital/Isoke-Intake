@@ -11,7 +11,7 @@ const vite = spawn('node', ['node_modules/vite/bin/vite.js'], {
   shell: true,
 })
 
-const api = spawn('node', ['node_modules/tsx/dist/cli.mjs', 'scripts/dev-api.ts'], {
+const api = spawn('node', ['node_modules/tsx/dist/cli.mjs', 'watch', 'scripts/dev-api.ts'], {
   cwd: root,
   stdio: 'inherit',
   shell: true,
