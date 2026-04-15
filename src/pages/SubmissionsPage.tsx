@@ -10,7 +10,7 @@ interface SubmissionsPageProps {
   onBack: () => void
 }
 
-export function SubmissionsPage({ onBack: _onBack }: SubmissionsPageProps) {
+export function SubmissionsPage({ onBack }: SubmissionsPageProps) {
   const { id: selectedId } = useParams<{ id?: string }>()
   const navigate = useNavigate()
   const staffToken = getSessionFlag(STAFF_TOKEN_KEY)
@@ -91,6 +91,7 @@ export function SubmissionsPage({ onBack: _onBack }: SubmissionsPageProps) {
           <SubmissionsList
             isLoading={isLoading}
             offset={offset}
+            onBack={onBack}
             onNext={() => setOffset(o => o + 25)}
             onPrev={() => setOffset(o => Math.max(o - 25, 0))}
             onQueryChange={q => { setQuery(q); setOffset(0) }}

@@ -1,9 +1,10 @@
-import { RefreshCw } from 'lucide-react'
+import { ArrowLeft, RefreshCw } from 'lucide-react'
 import type { JotformSubmissionSummary } from '../types/api'
 
 interface SubmissionsListProps {
   isLoading: boolean
   offset: number
+  onBack: () => void
   onNext: () => void
   onPrev: () => void
   onQueryChange: (query: string) => void
@@ -27,6 +28,7 @@ function SkeletonRow() {
 export function SubmissionsList({
   isLoading,
   offset,
+  onBack,
   onNext,
   onPrev,
   onQueryChange,
@@ -43,6 +45,10 @@ export function SubmissionsList({
 
   return (
     <section className="submissions-list-panel surface-panel">
+      <button className="ghost-button" type="button" onClick={onBack}>
+        <ArrowLeft size={16} />
+        Back to audit
+      </button>
       <div className="submissions-list-header">
         <div>
           <div className="eyebrow">Intake</div>
