@@ -54,6 +54,18 @@ a {
   min-height: 100vh;
 }
 
+.site-logo {
+  display: block;
+  height: 48px;
+  width: auto;
+  margin-bottom: 20px;
+}
+
+.site-logo--panel {
+  height: 36px;
+  margin-bottom: 4px;
+}
+
 .app-shell {
   width: min(1200px, calc(100% - 32px));
   margin: 0 auto;

@@ -36,6 +36,7 @@ function IntakeHome() {
 
   return (
     <main className="app-shell">
+      <img src="/isoke%20logo.png" alt="Isoke Developmental Services" className="site-logo" />
       <section className="hero-shell">
         <div className="hero-copy">
           <div className="eyebrow">Admissions / Intake</div>

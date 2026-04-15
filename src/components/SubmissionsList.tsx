@@ -45,6 +45,7 @@ export function SubmissionsList({
 
   return (
     <section className="submissions-list-panel surface-panel">
+      <img src="/isoke%20logo.png" alt="Isoke Developmental Services" className="site-logo site-logo--panel" />
       <button className="ghost-button" type="button" onClick={onBack}>
         <ArrowLeft size={16} />
         Back to audit
