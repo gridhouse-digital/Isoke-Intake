@@ -110,6 +110,7 @@ function AppRoutes() {
       <Route path="/" element={<IntakeHome />} />
       <Route path="/audit" element={<AuditPage onBack={() => navigate('/')} />} />
       <Route path="/submissions" element={<SubmissionsPage onBack={() => navigate('/audit')} />} />
+      <Route path="/submissions/:id" element={<SubmissionsPage onBack={() => navigate('/audit')} />} />
       <Route path="*" element={<IntakeHome />} />
     </Routes>
   )
