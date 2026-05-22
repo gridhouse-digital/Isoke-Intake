@@ -17,6 +17,13 @@ export function normalizeEmailAddress(value: string | undefined) {
   return normalizeEnvValue(value).replace(/\s+/g, '')
 }
 
+export function parseEmailList(value: string | undefined) {
+  return normalizeEnvValue(value)
+    .split(',')
+    .map(part => part.replace(/\s+/g, ''))
+    .filter(Boolean)
+}
+
 function escapeHtml(value: string) {
   return value
     .replaceAll('&', '&amp;')

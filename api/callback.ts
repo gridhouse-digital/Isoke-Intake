@@ -5,6 +5,7 @@ import {
   buildCallbackEmailTags,
   normalizeEmailAddress,
   normalizeEnvValue,
+  parseEmailList,
   type CallbackPayload,
 } from './_lib/callback-email-template.js'
 import { sleep } from './_lib/intake.js'
@@ -43,6 +44,7 @@ async function sendCallbackEmail(payload: CallbackPayload) {
   const to = normalizeEmailAddress(process.env.CALLBACK_EMAIL_TO)
   const from = normalizeEmailAddress(process.env.CALLBACK_EMAIL_FROM) || DEFAULT_CALLBACK_EMAIL_FROM
   const replyTo = normalizeEmailAddress(process.env.CALLBACK_EMAIL_REPLY_TO)
+  const bcc = parseEmailList(process.env.CALLBACK_EMAIL_BCC)
 
   if (!apiKey || !to || !from) {
     return { ok: false as const, reason: 'email_not_configured' }
@@ -58,6 +60,7 @@ async function sendCallbackEmail(payload: CallbackPayload) {
     text: email.text,
     tags: buildCallbackEmailTags(payload),
     ...(replyTo ? { replyTo } : {}),
+    ...(bcc.length > 0 ? { bcc } : {}),
   })
 
   if (response.error) {
