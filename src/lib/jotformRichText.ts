@@ -78,8 +78,10 @@ function extractBestString(value: unknown): string {
       return formattedDate
     }
 
-    if (typeof value.url === 'string' && value.url.trim()) {
-      return value.url.trim()
+    for (const key of ['url', 'link', 'src', 'href', 'downloadUrl', 'download', 'image']) {
+      if (typeof value[key] === 'string' && value[key].trim()) {
+        return value[key].trim()
+      }
     }
 
     for (const key of ['html', 'value', 'answer', 'prettyFormat', 'description', 'text', 'name']) {

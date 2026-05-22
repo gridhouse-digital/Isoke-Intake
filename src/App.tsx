@@ -36,6 +36,7 @@ function IntakeHome() {
 
   return (
     <main className="app-shell">
+      <img src="/isoke%20logo.png" alt="Isoke Developmental Services" className="site-logo" />
       <section className="hero-shell">
         <div className="hero-copy">
           <div className="eyebrow">Admissions / Intake</div>
@@ -110,6 +111,7 @@ function AppRoutes() {
       <Route path="/" element={<IntakeHome />} />
       <Route path="/audit" element={<AuditPage onBack={() => navigate('/')} />} />
       <Route path="/submissions" element={<SubmissionsPage onBack={() => navigate('/audit')} />} />
+      <Route path="/submissions/:id" element={<SubmissionsPage onBack={() => navigate('/audit')} />} />
       <Route path="*" element={<IntakeHome />} />
     </Routes>
   )

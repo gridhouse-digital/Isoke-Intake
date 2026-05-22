@@ -5,6 +5,7 @@ import { POST as callbackPost } from '../api/callback.ts'
 import { POST as verifyCodePost } from '../api/verify-code.ts'
 import { POST as staffCreateCodePost } from '../api/staff/create-code.ts'
 import { POST as staffDeleteCodePost } from '../api/staff/delete-code.ts'
+import { POST as jotformFilePost } from '../api/staff/jotform/file.ts'
 import { POST as staffListCodesPost } from '../api/staff/list-codes.ts'
 import { POST as staffLoginPost } from '../api/staff/login.ts'
 import { POST as staffRevokeCodePost } from '../api/staff/revoke-code.ts'
@@ -18,6 +19,7 @@ const routeHandlers = new Map<string, (request: Request) => Promise<Response>>([
   ['/api/callback', callbackPost],
   ['/api/staff/create-code', staffCreateCodePost],
   ['/api/staff/delete-code', staffDeleteCodePost],
+  ['/api/staff/jotform/file', jotformFilePost],
   ['/api/staff/jotform/get-submission', jotformGetSubmissionPost],
   ['/api/staff/jotform/list-submissions', jotformListSubmissionsPost],
   ['/api/staff/list-codes', staffListCodesPost],
@@ -129,10 +131,10 @@ const server = createServer(async (req, res) => {
 
     const response = await handler(request)
     const headers = withCorsHeaders(origin, new Headers(response.headers))
-    const responseText = await response.text()
+    const responseBuffer = Buffer.from(await response.arrayBuffer())
 
     res.writeHead(response.status, Object.fromEntries(headers.entries()))
-    res.end(responseText)
+    res.end(responseBuffer)
   } catch (error) {
     console.error(error)
     const headers = withCorsHeaders(origin, new Headers({ 'Content-Type': 'application/json' }))
@@ -149,6 +151,7 @@ server.listen(PORT, () => {
   console.log(`[dev-api] Staff delete-code on http://localhost:${PORT}/api/staff/delete-code`)
   console.log(`[dev-api] Staff jotform list-submissions on http://localhost:${PORT}/api/staff/jotform/list-submissions`)
   console.log(`[dev-api] Staff jotform get-submission on http://localhost:${PORT}/api/staff/jotform/get-submission`)
+  console.log(`[dev-api] Staff jotform file on http://localhost:${PORT}/api/staff/jotform/file`)
   console.log(`[dev-api] Staff list-codes on http://localhost:${PORT}/api/staff/list-codes`)
   console.log(`[dev-api] Staff revoke-code on http://localhost:${PORT}/api/staff/revoke-code`)
   console.log(`[dev-api] Staff session on http://localhost:${PORT}/api/staff/session`)

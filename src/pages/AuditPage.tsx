@@ -170,6 +170,7 @@ export function AuditPage({ onBack }: AuditPageProps) {
 
   return (
     <main className="audit-shell">
+      <img src="/isoke%20logo.png" alt="Isoke Developmental Services" className="site-logo" />
       <section className="surface-panel audit-header">
         <div>
           <div className="eyebrow">Staff audit</div>
