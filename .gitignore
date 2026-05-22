@@ -29,3 +29,5 @@ Desktop.ini
 .idea
 .vscode/*
 !.vscode/extensions.json
+
+.vercel
